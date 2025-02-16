@@ -94,6 +94,7 @@ async function handleExchange(prevState: unknown, formData: FormData) {
 
   const result = inputAmount * (inputRate / outputRate);
   setTimeout(() => {
+    // I must do this due to a bug with useActionState: https://github.com/facebook/react/issues/32362
     requestAnimationFrame(() => {
       (document.querySelector("select#currency-1") as HTMLSelectElement).value =
         currency1;
