@@ -17,10 +17,14 @@ $cosmiclatte: #fffce8;
 }
 
 .row {
-  display: grid;
   align-items: center;
+  display: flex;
+  flex-wrap: wrap;
   grid-template-columns: 1fr 2fr 1fr 1fr;
   gap: 8px;
+  @media screen and (min-width: 768px) {
+    display: grid;
+  }
 }
 
 input {
@@ -31,7 +35,7 @@ input {
   background: transparent;
   font-size: 14px;
   font-weight: 300;
-  max-width: 200px;
+  max-width: 150px;
 }
 
 input[type="number"]::-webkit-inner-spin-button {
@@ -51,6 +55,13 @@ input[type="number"]::-webkit-inner-spin-button {
   }
 }
 
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
 select {
   background-color: $onyx;
   padding: 6px;
@@ -59,5 +70,19 @@ select {
 }
 
 .error {
-  color: $cinnabar;
+  color: $cosmiclatte;
+  background-color: $cinnabar;
+  position: absolute;
+  bottom: 150%;
+  padding: 8px;
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: $cinnabar;
+    transform: rotate(45deg);
+    bottom: -6px;
+    left: 3px;
+    width: 12px;
+    height: 12px;
+  }
 }

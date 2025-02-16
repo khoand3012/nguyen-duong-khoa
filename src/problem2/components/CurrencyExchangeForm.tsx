@@ -11,20 +11,24 @@ export default function CurrencyExchangeForm() {
     input: 0,
     output: 0,
     error: "",
-    currency1: "USD",
-    currency2: "USD",
   });
+
   return (
     <>
       <form className="currency-form" action={formAction}>
         <div className="input-block row">
           <label htmlFor="input-amount">Amount to send:</label>
-          <input
-            defaultValue={state.input}
-            type="number"
-            id="input-amount"
-            name="input-amount"
-          />
+          <div className="input-container">
+            <input
+              defaultValue={state.input}
+              type="number"
+              id="input-amount"
+              name="input-amount"
+              step="any"
+            />
+            <span>{state.currency1}</span>
+            {state.error && <span className="error">{state.error}</span>}
+          </div>
           <label htmlFor="currency-1">Select currency:</label>
           <select
             name="currency-1"
@@ -32,11 +36,7 @@ export default function CurrencyExchangeForm() {
             defaultValue={state.currency1}
           >
             {Object.keys(exchangeRateMap).map((currency) => (
-              <option
-                key={currency + "-1"}
-                value={currency}
-                selected={currency === state.currency1}
-              >
+              <option key={currency + "-1"} value={currency}>
                 {currency}
               </option>
             ))}
@@ -44,12 +44,15 @@ export default function CurrencyExchangeForm() {
         </div>
         <div className="output-block row">
           <label htmlFor="output-amount">Amount to receive:</label>
-          <input
-            type="number"
-            id="input-amount"
-            readOnly
-            defaultValue={state.output}
-          />
+          <div className="input-container">
+            <input
+              type="number"
+              id="input-amount"
+              readOnly
+              defaultValue={state.output}
+            />
+            <span>{state.currency2}</span>
+          </div>
           <label htmlFor="currency-2">Select currency:</label>
           <select
             name="currency-2"
@@ -66,7 +69,6 @@ export default function CurrencyExchangeForm() {
         <button className="submit-btn" type="submit" disabled={isLoading}>
           {isLoading ? "Loading..." : "Exchange"}
         </button>
-        {state.error && <span className="error">{state.error}</span>}
       </form>
     </>
   );
@@ -93,16 +95,13 @@ async function handleExchange(prevState: unknown, formData: FormData) {
   await wait(2000);
 
   const result = inputAmount * (inputRate / outputRate);
-  setTimeout(() => {
-    // I must do this due to a bug with useActionState: https://github.com/facebook/react/issues/32362
-    requestAnimationFrame(() => {
-      (document.querySelector("select#currency-1") as HTMLSelectElement).value =
-        currency1;
-      (document.querySelector("select#currency-2") as HTMLSelectElement).value =
-        currency2;
-    });
-  }, 10);
-  return { input: inputAmount, output: result, currency1, currency2 };
+
+  return {
+    input: inputAmount,
+    output: result,
+    currency1,
+    currency2,
+  };
 }
 
 function wait(duration: number) {
