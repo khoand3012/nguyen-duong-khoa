@@ -1,0 +1,63 @@
+@import "https://fonts.googleapis.com/css2?family=Roboto:100,300,400,700,900";
+$font: "Roboto", sans-serif;
+$onyx: #3e363f;
+$cinnabar: #dd403a;
+$cosmiclatte: #fffce8;
+
+.currency-form {
+  display: flex;
+  color: $cosmiclatte;
+  font-family: $font;
+  flex-direction: column;
+  gap: 16px;
+  background-color: $onyx;
+  padding: 16px;
+  max-width: 700px;
+  border-radius: 8px;
+}
+
+.row {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  gap: 8px;
+}
+
+input {
+  outline: none;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 252, 232, 0.1);
+  color: $cosmiclatte;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 300;
+  max-width: 200px;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.submit-btn {
+  background-color: $cinnabar;
+  padding: 16px;
+  border: none;
+  font-size: 18px;
+  color: $cosmiclatte;
+  max-width: 200px;
+  margin: 0 auto;
+  &:disabled {
+    opacity: 0.8;
+  }
+}
+
+select {
+  background-color: $onyx;
+  padding: 6px;
+  color: $cosmiclatte;
+  border-radius: 4px;
+}
+
+.error {
+  color: $cinnabar;
+}
