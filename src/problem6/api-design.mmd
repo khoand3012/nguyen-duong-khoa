@@ -1,0 +1,38 @@
+sequenceDiagram
+    participant Client
+    participant API
+    participant Auth
+    participant DB
+    participant WebSocket
+    
+    Client->>API: POST /api/v1/scores/update with JWT
+    API->>Auth: Validate token
+    
+    alt Token Invalid
+        Auth-->>API: Unauthorized
+        API-->>Client: 401 Error
+    else Token Valid
+        API->>DB: Check if action processed + Update score
+        
+        alt Action already processed
+            DB-->>API: Duplicate action
+            API-->>Client: 400 Error
+        else Action valid
+            DB-->>API: Score updated
+            
+            alt Leaderboard changed
+                API->>WebSocket: Notify of change
+                WebSocket->>Client: Push update to all clients
+            end
+            
+            API-->>Client: 200 Success with new score
+        end
+    end
+    
+    Client->>API: GET /api/v1/leaderboard
+    API->>DB: Get top 10 scores
+    DB-->>API: Return leaderboard data
+    API-->>Client: Return leaderboard
+    
+    Client->>WebSocket: Connect for real-time updates
+    WebSocket-->>Client: Send initial + future updates
