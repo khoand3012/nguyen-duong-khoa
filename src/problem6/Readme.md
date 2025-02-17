@@ -73,9 +73,3 @@ Two main tables:
 2. Action validation to ensure score changes are legitimate
 3. Single processing of each action ID (idempotency)
 4. Rate limiting to prevent abuse
-
-## Improvements
-
-1. **Rate Limiting**: Implement rate limiting per user to prevent abuse (example: 10 requests/minute)
-2. **Idempotency**: Use action IDs to ensure each action is processed exactly once, preventing duplicate score increases
-3. **Caching Strategy**: Keep the current top 10 in Redis with a TTL of 1 minute for fast reads
