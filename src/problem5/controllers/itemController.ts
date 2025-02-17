@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import Item from "models/item";
+import Item from "../models/item";
+import { Op, WhereOptions } from "sequelize";
 
 // Get all items
 const getItems = async (req: Request, res: Response): Promise<void> => {
@@ -25,11 +26,35 @@ const getItemById = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// Find a set of items by attributes
+const findItems = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { name, description, quantity } = req.query;
+    const whereClause: WhereOptions = {};
+    if (name) {
+      whereClause.name = {};
+      whereClause.name[Op.substring] = name;
+    }
+    if (description) {
+      whereClause.description = {};
+      whereClause.description[Op.substring] = description;
+    }
+    if (quantity) {
+      whereClause.description = {};
+      whereClause.quantity = description;
+    }
+    const item = await Item.findAll({ where: whereClause });
+    res.status(200).json(item);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching items", error });
+  }
+};
+
 // Create a new item
 const createItem = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, description, quantity } = req.body;
-    const newItem = Item.create({
+    const newItem = await Item.create({
       name,
       description,
       quantity,
@@ -66,7 +91,7 @@ const deleteItem = async (req: Request, res: Response): Promise<void> => {
     const item = await Item.findByPk(req.params.id);
     if (item) {
       await item.destroy();
-      res.status(200).json({ message: 'Item deleted successfully' });
+      res.status(200).json({ message: "Item deleted successfully" });
       return;
     }
     res.status(404).json({ message: "Item not found!" });
@@ -81,4 +106,5 @@ export default {
   createItem,
   updateItem,
   deleteItem,
+  findItems,
 };

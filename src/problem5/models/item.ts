@@ -1,5 +1,5 @@
-import { DATE, NOW, NUMBER, STRING, UUID, UUIDV4 } from "sequelize";
-import dbInstance from "config/database";
+import { NUMBER, STRING, UUID, UUIDV4 } from "sequelize";
+import dbInstance from "../config/database";
 
 const Item = dbInstance.define("item", {
   id: {
@@ -18,10 +18,6 @@ const Item = dbInstance.define("item", {
   quantity: {
     type: NUMBER,
     defaultValue: 0,
-  },
-  createdDate: {
-    type: DATE,
-    defaultValue: NOW,
   },
 });
 
